@@ -1,0 +1,40 @@
+/* ***********默认SceneModelPicker组件样式*********************** */
+.sdg-widget-sceneModelPicker {
+  /* position: absolute; */
+  /* display: flex; */
+  /* flex-direction: row; */
+  width: 112px;
+  height: 32px;
+  right: 0px;
+  bottom: 0px;
+  padding: 0px;
+  color: white;
+  background-color: transparent;
+  /* text-align: center; */
+  user-select: none;
+}
+
+.sdg-widget-sceneModelPicker>.cesium-sceneModePicker-wrapper {
+  margin: 0px !important;
+  /* box-shadow: rgb(0 0 0 / 30%) 0px 1px 2px 0px; */
+  box-sizing: border-box;
+  border-width: 0px;
+  display: inline !important;
+
+}
+
+.sdg-widget-sceneModelPicker .cesium-button {
+  background-color: #ffffff !important;
+  transition: background-color 125ms ease-in-out;
+  box-shadow: rgb(0 0 0 / 30%) 0px 1px 2px 0px;
+  box-sizing: border-box;
+  fill: rgb(110, 110, 110) !important;
+
+  border-width: 0px !important;
+  border-radius: 0px !important;
+  margin: 0 2px 0px 0px !important;
+}
+
+.sdg-widget-sceneModelPicker .cesium-button:hover {
+  background-color: rgb(245, 245, 245) !important;
+}

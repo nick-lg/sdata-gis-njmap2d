@@ -1,0 +1,254 @@
+.mapboxgl-map {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+/* ***********默认popup样式*********************** */
+
+.sdg-ui-popupContainer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 9999px;
+  height: 100%;
+  pointer-events: none;
+}
+
+
+.sdg-popup {
+  position: absolute;
+  background-color: white;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  padding: 20px 15px 15px;
+  border-radius: 10px;
+  border: 1px solid #cccccc;
+  left: 0px;
+  top: 0px;
+  min-width: 280px;
+  max-width: 560px;
+  display: none;
+  pointer-events: all;
+}
+
+.sdg-popup:after,
+.sdg-popup:before {
+  top: 100%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
+.sdg-popup:after {
+  border-top-color: white;
+  border-width: 10px;
+  left: 48px;
+  margin-left: -10px;
+}
+
+.sdg-popup:before {
+  border-top-color: #cccccc;
+  border-width: 11px;
+  left: 48px;
+  margin-left: -11px;
+  content: "";
+}
+
+
+.sdg-popup-closeBtn {
+  text-decoration: none;
+  position: absolute;
+  top: 2px;
+  right: 8px;
+  z-index: 999;
+}
+
+/* .sdg-popup-closeBtn:hover {
+  color: red;
+} */
+
+.sdg-popup-closeBtn::after {
+  content: "×";
+  font-size: 24px;
+}
+
+/* ***********基础样式*********************** */
+
+
+
+.sdg-ui-inner-container {
+  position: absolute;
+  inset: 15px 15px 5px;
+  pointer-events: none;
+}
+
+.sdg-ui-inner-container * {
+  pointer-events: auto;
+}
+
+.sdg-ui-corner {
+  position: absolute;
+  display: flex;
+  color: rgb(50, 50, 50);
+}
+
+.sdg-ui-top-left {
+  top: 0;
+  left: 0;
+
+  align-items: flex-start;
+  flex-flow: column;
+}
+
+.sdg-ui-top-right {
+  top: 90px;
+  right: 0;
+}
+
+.sdg-ui-bottom-left {
+  bottom: 35px;
+  left: 0;
+}
+
+.sdg-ui-bottom-right {
+  bottom: 35px;
+  right: 0;
+}
+
+
+.sdg-component {
+  margin-bottom: 10px;
+
+  /* background-color: rgb(255, 255, 255);
+    box-shadow: rgb(0 0 0 / 30%) 0px 1px 2px 0px;
+    box-sizing: border-box; */
+}
+
+
+/* ******************button通用样式(非包裹button)****************** */
+.sdg-widget-button {
+  width: 32px;
+  height: 32px;
+  font-size: 14px;
+  background-color: #fff;
+  color: #6e6e6e;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  cursor: pointer;
+  text-align: center;
+  /* display: flex;
+    flex-flow: row nowrap;
+    justify-content: center; */
+  /* align-items: center; */
+  transition: background-color 125ms ease-in-out;
+
+
+  box-shadow: rgb(0 0 0 / 30%) 0px 1px 2px 0px;
+  box-sizing: border-box;
+
+  pointer-events: all;
+}
+
+.sdg-widget-button:hover {
+  background-color: rgb(245, 245, 245);
+}
+
+.sdg-widget-button svg {
+  width: 100%;
+  height: 100%;
+  color: rgb(110, 110, 110);
+  stroke-width: 28px;
+}
+
+/* ******************fps****************** */
+.cesium-performanceDisplay-defaultContainer {
+  top: 15px !important;
+}
+
+
+
+/*****************Editor**************************/
+.sdg-popup-attr-editor {
+  position: absolute;
+  /* background-color: white; */
+  background-color: transparent;
+  /* box-shadow: 0 1px 4px rgb(0 0 0 / 20%); */
+  /* padding: 20px 15px 15px; */
+  padding: 0;
+  border-radius: 10px;
+  /* border: 1px solid #cccccc; */
+  border: 0px;
+  left: 0px;
+  top: 0px;
+  min-width: 280px;
+  max-width: 560px;
+  display: none;
+  pointer-events: all;
+
+}
+
+
+.sdg-popup-attr-editor .close-button {
+  display: none !important;
+}
+
+.sdg-popup-attr-editor .dg.main {
+  width: auto !important;
+}
+
+
+.sdg-popup-attr-editor .cr.color input[type=text] {
+  height: 22px;
+}
+
+
+.sdg-popup-attr-editor .save-row {
+  height: 20px;
+  line-height: 20px;
+}
+
+.sdg-popup-attr-editor .save-row select {
+  display: none;
+
+}
+
+.sdg-popup-attr-editor .dg li.save-row .button.gears {
+  display: none !important;
+}
+
+.sdg-popup-attr-editor .dg li.save-row {
+  /* 262626 */
+  background-color: rgba(0, 0, 0, 1) !important;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  height: 20px !important;
+  line-height: 20px !important;
+}
+
+.sdg-popup-attr-editor .button.save {
+  background-color: rgb(26, 26, 26) !important;
+}
+
+.sdg-popup-attr-editor .button.revert {
+  background-color: rgb(26, 26, 26) !important;
+}
+
+.sdg-popup-attr-editor .button.save-as {
+  background-color: rgb(26, 26, 26) !important;
+}
+
+.sdg-popup-attr-editor .dg li.save-row .button {
+  height: 16px !important;
+  margin-top: 5px !important;
+}
+
+.sdg-popup-attr-editor .dg .c select {
+  color: rgb(20, 20, 20);
+}

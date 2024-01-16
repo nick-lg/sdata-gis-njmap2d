@@ -1,0 +1,31 @@
+.sdg-ui-menuContainer {
+    position: absolute;
+    /* min-width: 120px; */
+    /* display: none; */
+    width: auto;
+    left: 300px;
+    top: 300px
+}
+
+.sdg-ui-menuContainer .ant-menu-item {
+    /* height: 30px !important;
+    line-height: 30px !important; */
+    min-width: 120px;
+}
+
+
+/* .sdg-ui-menuContainer .sdg-menuItem-icon
+{
+    width:10px;
+    height: 10px;
+} */
+
+
+.sdg-menu-icon {
+    vertical-align: -5.2px !important;
+}
+
+.sdg-menu-icon svg {
+    width: 20px !important;
+    height: 20px !important;
+}

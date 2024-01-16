@@ -1,0 +1,29 @@
+{
+    "id": "fde7e957-8fd5-4f2b-8340-3b4300faaef9",
+    "type": "bigscreen",
+    "engineType": "sdata-gis-njmap",
+    "main": "app.6c03fb38.js",
+    "version": "2",
+    "process": true,
+    "props": {
+        "configuration": [
+            "data"
+        ],
+        "img": "custom_table.png",
+        "disableimg": "disabled_custom_table.png",
+        "name": "React版本的演示Demo",
+        "className": "className-demo",
+        "vars": [
+            "id"
+        ],
+        "showDataChooseTool": true,
+        "token": "e707ea185bb3d8dc7092609227732787"
+    },
+    "online-development-mode": {
+        "open": false,
+        "host": "http://localhost",
+        "port": "3000",
+        "entry": "js/app.js"
+    },
+    "templateType": "react"
+}

@@ -1,0 +1,38 @@
+/* ***********默认ScaleBar组件样式*********************** */
+
+.sdg-widget-scaleBar {
+    pointer-events: auto;
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    border-radius: 15px;
+    padding-left: 5px;
+    padding-right: 5px;
+  
+    height: 30px;
+    width: 125px;
+    box-sizing: content-box;
+  }
+  
+  .sdg-widget-scaleBar-label {
+    display: inline-block;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: lighter;
+    line-height: 30px;
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, .4);
+    color: #FFFFFF;
+    width: 125px;
+    text-align: center;
+  }
+  
+  .sdg-widget-scaleBar-rule {
+    border-left: 1px solid #FFFFFF;
+    border-right: 1px solid #FFFFFF;
+    border-bottom: 1px solid #FFFFFF;
+    position: absolute;
+    height: 10px;
+    top: 15px;
+  }
+  

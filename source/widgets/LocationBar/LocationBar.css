@@ -1,0 +1,24 @@
+/* ***********默认LocationBar组件样式*********************** */
+.sdg-widget-locationBar {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    right: 0px;
+    bottom: 0px;
+    padding: 5px;
+    color: #FFFFFF;
+    background-color: rgba(0, 0, 0, .4);
+    border-radius: 5px;
+    text-align: center;
+    user-select: none;
+  }
+
+  .sdg-widget-locationBar span {
+    width: 120px;
+    overflow-x: hidden;
+    margin-right: 5px;
+  }
+
+
+
+   

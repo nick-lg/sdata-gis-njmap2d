@@ -1,0 +1,9 @@
+/* ***********默认鹰眼控件*********************** */
+.sdg-widget-eagleEye {
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 2px 0px;
+    /* position: absolute; */
+    right: 0px;
+    bottom: 0px;
+    /* border: red 1px solid */
+  }
+

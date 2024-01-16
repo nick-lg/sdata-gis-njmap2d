@@ -1,0 +1,9 @@
+/* ***********默认HomeButton组件样式*********************** */
+
+.sdg-widget-homeButton svg {
+  transform: scale(0.8);
+}
+
+.sdg-widget-homeButton svg:active {
+  transform: scale(0.74);
+}

@@ -1,0 +1,4 @@
+/* ***********默认ZoomControl组件样式*********************** */
+.sdg-widget-zoomButton svg:active {
+    transform: scale(0.85);
+  }
