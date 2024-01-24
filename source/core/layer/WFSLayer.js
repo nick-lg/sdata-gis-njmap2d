@@ -19,6 +19,7 @@ import { Layer } from "./Layer.js";
 class WFSLayer extends Layer {
     #url;
     #options;
+    #tickID
 
     get url() {
         return this.#url;
@@ -69,8 +70,8 @@ class WFSLayer extends Layer {
         // }
 
 
-        this._delegate = {};
 
+        this._delegate = {};
         this._state = EnumState.INITIALIZED;
     }
 
@@ -86,6 +87,8 @@ class WFSLayer extends Layer {
     pickFeatures(wp, options) {
         if (!this.pickable || !wp || typeof wp != "object")
             return;
+
+
 
         // let position;
         // position = CesiumHelper.WindowToWGS84(this.map.viewer, new Cesium.Cartesian2(wp.x, wp.y));
@@ -112,7 +115,16 @@ class WFSLayer extends Layer {
         // });
 
         const self = this;
-        let features = this._map._viewer.queryRenderedFeatures(new mapboxgl.Point(wp.x, wp.y)).filter(p => p.layer.id == this._delegate.id);
+        let features;
+        if (this._delegate.layerType == "VTS") {
+            //VTS图层
+            features = this._map._viewer.queryRenderedFeatures(new mapboxgl.Point(wp.x, wp.y)).filter(p => p.layer?.metadata?.userdata?.id == this.id);
+        }
+        else {
+            //普通WFS
+            features = this._map._viewer.queryRenderedFeatures(new mapboxgl.Point(wp.x, wp.y)).filter(p => p.layer.id == this._delegate.id);
+        }
+
 
         // let features = this._map._viewer.queryRenderedFeatures(new mapboxgl.Point(1000, 500));
 
@@ -147,93 +159,151 @@ class WFSLayer extends Layer {
         //     this._map.viewer.setGlyphs(this._delegate.glyphs);
 
         const selfaaa = this;
-        fetch(this.#url).then(res => res.json()).then(data => {
-            // const p = data.features[0].geometry
-            // if (!p) {
-            //     console.warn(`empty layer data`);
-            //     return;
-            // }
+        const options = selfaaa.#options;
+        const levels = [
+            JSHelper.IsInteger(options.lodMinLevel) ? options.lodMinLevel : (JSHelper.IsInteger(options.minzoom) ? options.minzoom : 0),
+            JSHelper.IsInteger(options.lodMaxLevel) ? options.lodMaxLevel : (JSHelper.IsInteger(options.maxzoom) ? options.maxzoom : 22),
+        ]
 
-            // let type;
-            // switch (p.geometry.type) {
-            //     case "Point":
-            //     case "MultiPoint":
-            //         type = "Point"
-            //         break;
-            //     case "LineString":
-            //     case "MultiPoint":
-            //         break;
+        if (options.type == "fill-extrusion") {
+            var VTS = new GeoGlobe.Format.VTS();
+            const layer = selfaaa.#options.layer
+            if (!layer) {
+                throw new Error(`创建建筑类型图层，需要指定layer属性`);
+            }
+            var ltfw_layer = VTS.createLayer(selfaaa.#url, {
+                layer: layer,
+            });
 
-            //     default:
-            //         break;
-            // }
-
-            const options = selfaaa.#options;
-
-            const levels = [
-                JSHelper.IsInteger(options.lodMinLevel) ? options.lodMinLevel : (JSHelper.IsInteger(options.minzoom) ? options.minzoom : 0),
-                JSHelper.IsInteger(options.lodMaxLevel) ? options.lodMaxLevel : (JSHelper.IsInteger(options.maxzoom) ? options.maxzoom : 22),
-            ]
-
-            selfaaa.map._viewer.addSource(selfaaa.id, {
-                type: "geojson",
-                data: data
+            const style = options.style || paint;
+            ltfw_layer.layers.forEach(pLayer => {
+                Object.keys(style).forEach(key => {
+                    pLayer.paint[key] = style[key];
+                })
+                // map.viewer.setLayerZoomRange(pLayer.id, levels[0], levels[1])
+                // map.viewer.setLayoutProperty(pLayer.id, "minzoom", levels[0]);
+                // map.viewer.setLayoutProperty(pLayer.id, "maxzoom", levels[0]);
+                pLayer.metadata.userdata = {
+                    id: this.id
+                }
             })
 
-
-            selfaaa._delegate = {
-                id: selfaaa.id,
-                source: selfaaa.id,
-                type: options.type,
-                paint: options.style || options.paint,
-                minzoom: levels[0],
-                maxzoom: levels[1],
+            this._delegate = ltfw_layer;
+            this._delegate.layers[0].metadata.userdata = {
+                id: this.id
             }
 
-            if (options.filter)
-                selfaaa._delegate.filter = options.filter
+            const _id = `${layer}_0_0`;
+            this.#tickID = setInterval(() => {
+                // JBXQ_LTFW
+                // JBXQ_LTFW_0_0
+                let layers = map.viewer.getStyle().layers.filter(p => p.id == _id);
+                if (layers.length > 0) {
+                    clearInterval(selfaaa.#tickID);
+                    selfaaa.#tickID = undefined;
+                    map.viewer.setLayerZoomRange(_id, levels[0], levels[1]);
+                }
+            }, 200)
 
-
-            if (this._isBaseLayer)
-                this._map.viewer.addLayerToGroup(this.delegate, "basemap");
-            else
-                this._map.viewer.addLayer(this.delegate);
-
-
-            // let index = this._isBaseLayer ? this._map.baseLayers.length - 1 : undefined;//for this time layer has been added to layers
-            // this._map.viewer.imageryLayers.add(this._delegate, index);
-
-            // let index = (this._isBaseLayer || this._priority === 0) ? this._map.baseLayers.length - 1 : undefined;//for this time layer has been added to layers
-            // if (typeof index === "undefined") {
-            //     index = this._map.viewer.imageryLayers._layers.filter(p => p._uPriority < 2).length - 1;
-            // }
-            // this._map.viewer.imageryLayers.add(this._delegate, index);
-            // this._delegate._uPriority = this._isBaseLayer ? 0 : this._priority;
-            // queueLayer(this);
+            map.viewer.addLayer(ltfw_layer);
 
             //状态更新
             this._state = EnumState.ADDED;
 
             //更新可见性
             this.visible = this._visible;
+        }
+        else {
+            fetch(this.#url).then(res => res.json()).then(data => {
+                // const p = data.features[0].geometry
+                // if (!p) {
+                //     console.warn(`empty layer data`);
+                //     return;
+                // }
+
+                // let type;
+                // switch (p.geometry.type) {
+                //     case "Point":
+                //     case "MultiPoint":
+                //         type = "Point"
+                //         break;
+                //     case "LineString":
+                //     case "MultiPoint":
+                //         break;
+
+                //     default:
+                //         break;
+                // }
 
 
-        }).catch(err => {
-            console.error(`request wfs data failed:${err}`);
-        })
 
 
+                selfaaa.map._viewer.addSource(selfaaa.id, {
+                    type: "geojson",
+                    data: data
+                })
 
 
+                selfaaa._delegate = {
+                    id: selfaaa.id,
+                    source: selfaaa.id,
+                    type: options.type,
+                    paint: options.style || options.paint,
+                    minzoom: levels[0],
+                    maxzoom: levels[1],
+                }
+
+                if (options.filter)
+                    selfaaa._delegate.filter = options.filter
+
+
+                if (this._isBaseLayer)
+                    this._map.viewer.addLayerToGroup(this.delegate, "basemap");
+                else
+                    this._map.viewer.addLayer(this.delegate);
+
+
+                // let index = this._isBaseLayer ? this._map.baseLayers.length - 1 : undefined;//for this time layer has been added to layers
+                // this._map.viewer.imageryLayers.add(this._delegate, index);
+
+                // let index = (this._isBaseLayer || this._priority === 0) ? this._map.baseLayers.length - 1 : undefined;//for this time layer has been added to layers
+                // if (typeof index === "undefined") {
+                //     index = this._map.viewer.imageryLayers._layers.filter(p => p._uPriority < 2).length - 1;
+                // }
+                // this._map.viewer.imageryLayers.add(this._delegate, index);
+                // this._delegate._uPriority = this._isBaseLayer ? 0 : this._priority;
+                // queueLayer(this);
+
+                //状态更新
+                this._state = EnumState.ADDED;
+
+                //更新可见性
+                this.visible = this._visible;
+
+
+            }).catch(err => {
+                console.error(`request wfs data failed:${err}`);
+            })
+        }
     }
 
     _onRemoved(map) {
         //真正移除影像图的指令
         // if (this.delegate.id)
-        if (this.delegate.id)
+        if (this.delegate.layerType == "VTS") {
+            if (this.#tickID) {
+                clearInterval(this.#tickID);
+                this.#tickID = undefined;
+            }
+
+
+            this.delegate.layers.forEach(p => {
+                map.viewer.removeLayer(p.id)
+            })
+            map.viewer.removeSource(this.delegate.source_id)
+        }
+        else
             map.viewer.removeLayerAndSource(this.delegate.id);
-
-
 
         //状态更新
         this._map = undefined;
@@ -243,7 +313,17 @@ class WFSLayer extends Layer {
     _setVisible(flag) {
         if (this._state != EnumState.ADDED)
             return;
-        this._map.viewer[flag ? "showLayer" : "hideLayer"](this._isNJLayer ? this._delegate.id : this._id);
+
+        const method = flag ? "showLayer" : "hideLayer";
+        const that = this;
+        if (this._delegate.layerType == "VTS") {
+            this._delegate.layers.forEach(p => {
+                that.map.viewer[method](p.id)
+            })
+        }
+        else {
+            this._map.viewer[method](this._isNJLayer ? this._delegate.id : this._id);
+        }
         this._visible = flag;
     }
 }

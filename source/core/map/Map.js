@@ -616,31 +616,31 @@ class Map {
         // debugger
         //添加新的底图(底图即为若干imageryLayer)
         let options;
-        let layer;
+
         for (let i = 0; i < baseMapOptions.length; i++) {
-            options = baseMapOptions[i];
-            if (JSHelper.IsString(options))
-                options = {
-                    type: options
+            try {
+                options = baseMapOptions[i];
+                if (JSHelper.IsString(options))
+                    options = {
+                        type: options
+                    }
+
+                if (options.type === "none") {
+                    this._baseMap.clear();
+                    this._viewer.clearGroup("basemap")
+                    break;
                 }
 
-            if (options.type === "none") {
-                this._baseMap.clear();
-                this._viewer.clearGroup("basemap")
-                break;
+                // imageryLayer = ImageryLayerFactory.Create(options);
+                let layer = LayerFactory.CreateAsync(options.type, options);
+                layer._isBaseLayer = true;
+                if (layer instanceof LayerGroup) {
+                    layer.eachLayer(p => p._isBaseLayer = true, false);
+                }
+                this._baseMap.addLayer(layer);
+            } catch (error) {
+
             }
-
-
-
-
-
-            // imageryLayer = ImageryLayerFactory.Create(options);
-            layer = await LayerFactory.CreateAsync(options.type, options);
-            layer._isBaseLayer = true;
-            if (layer instanceof LayerGroup) {
-                layer.eachLayer(p => p._isBaseLayer = true, false);
-            }
-            this._baseMap.addLayer(layer);
         }
 
         //所有底图设置完毕， 触发底图更改事件
@@ -1066,11 +1066,6 @@ class Map {
      * @memberof Map
      */
     async identifyAsync(wp, options) {
-        // let mouseInfo = this.mouseEvent._getMouseInfo(wp);
-
-
-        // debugger
-
         // //基于显存查询
         // if (mouseInfo.target.delegate)
         //     return mouseInfo.target;

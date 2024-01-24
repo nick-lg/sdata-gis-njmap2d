@@ -110,8 +110,12 @@ class TileLayer extends Layer {
 
         if (this._delegate.sprite)
             this._map.viewer.loadSprite(this._delegate.sprite);
-        if (this._delegate.glyphs)
-            this._map.viewer.setGlyphs(this._delegate.glyphs);
+        if (this._delegate.glyphs) {
+            const style = this._map.viewer.getStyle();
+            if (!style || style.glyphs != this._delegate.glyphs)
+                this._map.viewer.setGlyphs(this._delegate.glyphs);
+        }
+
 
         if (this._isBaseLayer)
             this._map.viewer.addLayerToGroup(this.delegate, "basemap");
@@ -140,7 +144,13 @@ class TileLayer extends Layer {
 
     _onRemoved(map) {
         //真正移除影像图的指令
-        this._map.viewer.removeLayerAndSource(this.delegate.id);
+        if (this.delegate.id)
+            this._map.viewer.removeLayerAndSource(this.delegate.id);
+        else if (this._isNJLayer && this._delegate.layers) {
+            this._delegate.layers.forEach(element => {
+                this._map.viewer.removeLayer(element.id);
+            }, this);
+        }
 
 
         //状态更新

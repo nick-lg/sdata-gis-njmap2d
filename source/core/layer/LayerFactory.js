@@ -26,7 +26,7 @@ class LayerFactory {
      * @return {Layer|undefined} 
      * @memberof LayerFactory
      */
-    static async CreateAsync(type, options) {
+    static CreateAsync(type, options) {
         let layer;
         switch (type) {
             case "gaode-street":
