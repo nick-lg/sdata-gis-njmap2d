@@ -1,6 +1,6 @@
 {
   "name": "sdata-gis-njmap",
-  "version": "1.0.4",
+  "version": "1.0.7",
   "description": "GIS底座",
   "main": "./build/sdata-gis.esm.js",
   "module": "./build/sdata-gis.esm.js",
