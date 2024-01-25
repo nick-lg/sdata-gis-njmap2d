@@ -297,13 +297,16 @@ class WFSLayer extends Layer {
             }
 
 
-            this.delegate.layers.forEach(p => {
+            this.delegate?.layers.forEach(p => {
                 map.viewer.removeLayer(p.id)
             })
             map.viewer.removeSource(this.delegate.source_id)
         }
-        else
-            map.viewer.removeLayerAndSource(this.delegate.id);
+        else {
+            if (this.delegate?.id)
+                map.viewer.removeLayerAndSource(this.delegate.id);
+        }
+
 
         //状态更新
         this._map = undefined;
